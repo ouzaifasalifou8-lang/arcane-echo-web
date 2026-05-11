@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon IA Locale</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
-        .bg {
-            background-image: url('https://i.ibb.co/wrF7tHF5/1000145737.jpg');
-            height: 100%; background-position: center;
-            background-repeat: no-repeat; background-size: cover;
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .header { color: white; font-family: monospace; padding: 20px; font-size: 14px; }
-        .footer { text-align: center; padding-bottom: 50px; }
-        .btn {
-            border: 1px solid #D4AF37; color: #D4AF37;
-            padding: 10px 30px; border-radius: 20px;
-            background: rgba(0,0,0,0.3); font-family: sans-serif;
-        }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        #chat-container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; padding: 10px; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #output { margin-top: 20px; white-space: pre-wrap; font-style: italic; color: #333; }
     </style>
 </head>
 <body>
-    <div class="bg">
-        <div class="header">WEDNESDAY, JAN 28, 2026<br>11:19:12 AM</div>
-        <div class="footer">
-            <button class="btn">Arcane Echo</button>
-        </div>
+    <div id="chat-container">
+        <h2>IA en JavaScript</h2>
+        <textarea id="input" placeholder="Posez votre question ici..."></textarea>
+        <button id="generate-btn">Générer la réponse</button>
+        <div id="output">L'IA attend votre question...</div>
     </div>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
