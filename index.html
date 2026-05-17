@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mochi Cloner - Test Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 { color: #333; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0051cb; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Mochi Cloner 🛠️</h2>
+    
+    <div class="form-group">
+        <label for="renderUrl">URL de ton serveur Render :</label>
+        <input type="text" id="renderUrl" value="https://arcane-echo-web.onrender.com">
+    </div>
+
+    <form id="cloneForm">
+        <div class="form-group">
+            <label for="apkFile">Sélectionner l'APK d'origine :</label>
+            <input type="file" id="apkFile" accept=".apk" required>
+        </div>
+        <div class="form-group">
+            <label for="ancienPackage">Ancien Package Name :</label>
+            <input type="text" id="ancienPackage" placeholder="ex: com.original.app" required>
+        </div>
+        <div class="form-group">
+            <label for="nouveauPackage">Nouveau Package Name :</label>
+            <input type="text" id="nouveauPackage" placeholder="Même longueur ! ex: com.original.apc" required>
+        </div>
+        <div class="form-group">
+            <label for="ancienNom">Ancien Nom de l'App :</label>
+            <input type="text" id="ancienNom" placeholder="ex: MonApplication" required>
+        </div>
+        <div class="form-group">
+            <label for="nouveauNom">Nouveau Nom :</label>
+            <input type="text" id="nouveauNom" placeholder="Même longueur ! ex: MonClonageeee" required>
+        </div>
+        <button type="submit">Lancer le clonage binaire</button>
+    </form>
+
+    <div id="status">Prêt pour le test</div>
+</div>
+
+<script>
+    document.getElementById('cloneForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const serverUrl = document.getElementById('renderUrl').value.trim();
+        const statusDiv = document.getElementById('status');
+        
+        const fileInput = document.getElementById('apkFile');
+        const ancienPkg = document.getElementById('ancienPackage').value;
+        const nouveauPkg = document.getElementById('nouveauPackage').value;
+        const ancienNom = document.getElementById('ancienNom').value;
+        const nouveauNom = document.getElementById('nouveauNom').value;
+
+        if (ancienPkg.length !== nouveauPkg.length || ancienNom.length !== nouveauNom.length) {
+            alert("⚠️ Attention : L'ancien et le nouveau texte doivent faire EXACTEMENT la même longueur pour ce test binaire !");
+            return;
+        }
+
+        statusDiv.innerText = "Téléversement et traitement en cours sur Render...";
+        statusDiv.style.color = "#0070f3";
+
+        const formData = new FormData();
+        formData.append('apk', fileInput.files[0]);
+        formData.append('ancienPackage', ancienPkg);
+        formData.append('nouveauPackage', nouveauPkg);
+        formData.append('ancienNom', ancienNom);
+        formData.append('nouveauNom', nouveauNom);
+
+        fetch(`${serverUrl}/clone`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Erreur serveur lors du traitement.');
+            return response.blob();
+        })
+        .then(blob => {
+            statusDiv.innerText = "Succès ! Téléchargement du clone...";
+            statusDiv.style.color = "green";
+            
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "Clone_" + fileInput.files[0].name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error(error);
+            statusDiv.innerText = "Échec du traitement.";
+            statusDiv.style.color = "red";
+        });
+    });
+</script>
+
+</body>
+              </html>
+              
