@@ -4,24 +4,21 @@
 #include <vector>
 #include <cstdlib>
 
-// Fonction utilitaire pour chercher et remplacer une chaîne exacte dans un fichier binaire
 bool patchFichierBinaire(const std::string& cheminFichier, const std::string& ancienneChaine, const std::string& nouvelleChaine) {
     if (ancienneChaine.length() != nouvelleChaine.length()) {
-        std::cerr << "Erreur : Pour éviter la corruption, les deux chaînes doivent avoir exactement la même longueur." << std::endl;
+        std::cerr << "Erreur de taille : " << ancienneChaine.length() << " vs " << nouvelleChaine.length() << std::endl;
         return false;
     }
 
     std::ifstream fichierIn(cheminFichier, std::ios::binary);
     if (!fichierIn) return false;
 
-    // Lecture de tout le fichier en mémoire
     std::vector<char> contenu((std::istreambuf_iterator<char>(fichierIn)), std::istreambuf_iterator<char>());
     fichierIn.close();
 
     bool modifie = false;
     size_t tailleAncienne = ancienneChaine.length();
 
-    // Recherche de la chaîne d'octets
     for (size_t i = 0; i <= contenu.size() - tailleAncienne; ++i) {
         bool correspondance = true;
         for (size_t j = 0; j < tailleAncienne; ++j) {
@@ -32,12 +29,11 @@ bool patchFichierBinaire(const std::string& cheminFichier, const std::string& an
         }
 
         if (correspondance) {
-            // Remplacement des octets sur place
             for (size_t j = 0; j < tailleAncienne; ++j) {
                 contenu[i + j] = nouvelleChaine[j];
             }
             modifie = true;
-            i += tailleAncienne - 1; // Avancer l'index
+            i += tailleAncienne - 1;
         }
     }
 
@@ -46,50 +42,41 @@ bool patchFichierBinaire(const std::string& cheminFichier, const std::string& an
         fichierOut.write(contenu.data(), contenu.size());
         return true;
     }
-
     return false;
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " <apk_entree> <apk_sortie>" << std::endl;
+    // Vérification des arguments : entrée, sortie, ancien_pkg, nouveau_pkg, ancien_nom, nouveau_nom
+    if (argc < 7) {
+        std::cerr << "Arguments manquants pour le clonage." << std::endl;
         return 1;
     }
 
     std::string apkEntree = argv[1];
     std::string apkSortie = argv[2];
+    std::string ancienPackage = argv[3];
+    std::string nouveauPackage = argv[4];
+    std::string ancienNom = argv[5];
+    std::string nouveauNom = argv[6];
 
-    std::cout << "[Moteur C++] Début de la chirurgie binaire..." << std::endl;
+    std::cout << "[C++] Début de la modification de l'APK..." << std::endl;
 
-    // 1. Création d'un dossier temporaire de travail
     std::system("mkdir -p temp_extraction");
 
-    // 2. Décompression native de l'APK d'entrée
     std::string cmdUnzip = "unzip -q " + apkEntree + " -d temp_extraction";
     if (std::system(cmdUnzip.c_str()) != 0) {
-        std::cerr << "Erreur lors de la décompression de l'APK." << std::endl;
+        std::cerr << "Échec de l'extraction." << std::endl;
         return 1;
     }
 
-    // 3. Application des patchs binaires
-    // Exemple : Remplacement du package name (longueur identique obligatoire, ex: 15 caractères)
-    // À adapter dynamiquement selon l'APK cible
-    std::string ancienPackage = "com.original.app"; 
-    std::string nouveauPackage = "com.original.apc"; 
-    patchFichierBinaire("temp_extraction/AndroidManifest.xml", iancienPackage, nouveauPackage);
-
-    // Exemple : Remplacement du nom de l'application s'il est défini dans le String Pool de resources.arsc
-    std::string ancienNom = "ApplicationOriginale";
-    std::string nouveauNom = "ApplicationClonageee";
+    // Application des patchs avec les valeurs reçues
+    patchFichierBinaire("temp_extraction/AndroidManifest.xml", ancienPackage, nouveauPackage);
     patchFichierBinaire("temp_extraction/resources.arsc", ancienNom, nouveauNom);
 
-    // 4. Re-compression de l'APK modifié
     std::string cmdZip = "cd temp_extraction && zip -r -q ../" + apkSortie + " .";
     std::system(cmdZip.c_str());
-
-    // 5. Nettoyage du dossier temporaire
     std::system("rm -rf temp_extraction");
 
-    std::cout << "[Moteur C++] Clonage et empaquetage terminés avec succès." << std::endl;
+    std::cout << "[C++] Processus terminé avec succès." << std::endl;
     return 0;
 }
