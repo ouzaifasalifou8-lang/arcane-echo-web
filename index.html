@@ -1,143 +1,280 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mochi Cloner - Test Interface</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HyperTech Niger — Écosystème technologique intégré au Niger</title>
+  <meta name="description" content="HyperTech Niger : six filiales complémentaires pour vos solutions technologiques au Niger et en Afrique de l&#039;Ouest.">
+  <link rel="icon" href="/logo.png" type="image/png">
+  <link rel="shortcut icon" href="/logo.png" type="image/png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary:   '#06A4DE',
+            secondary: '#71BC52',
+            accent:    '#107EA4',
+          },
+          fontFamily: {
+            sans:    ['"Inter"', 'system-ui', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif'],
+          },
         }
-        .container {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        h2 { color: #333; margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        input[type="text"], input[type="file"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #0070f3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover { background-color: #0051cb; }
-        #status { margin-top: 15px; font-weight: bold; text-align: center; color: #666; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    :root { --primary: #06A4DE; --secondary: #71BC52; --accent: #107EA4; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; letter-spacing: -0.04em; }
+    .btn-primary   { background:var(--primary); color:#fff; }
+    .btn-primary:hover { opacity:.88; }
+    .btn-outline   { border:2px solid var(--primary); color:var(--primary); }
+    .btn-outline:hover { background:var(--primary); color:#fff; }
+    .text-primary  { color:var(--primary); }
+    .bg-primary    { background:var(--primary); }
+    .border-primary{ border-color:var(--primary); }
+    html { scroll-behavior:smooth; }
+    .counter { font-variant-numeric: tabular-nums; }
+    .card-hover { transition: transform .2s ease, box-shadow .2s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(15,23,42,.08); }
+    .section-badge { border-radius:9999px; padding: .375rem 1rem; font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.24em; }
+    .prose h2 { font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.04em; color:#0a0a0a; font-weight:800; font-size:1.75rem; margin-bottom:.75rem; }
+    .prose h3 { font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.03em; color:#111; font-weight:700; font-size:1.25rem; margin-bottom:.5rem; }
+    .prose p { color:#374151; line-height:1.75; margin-bottom:1rem; }
+    .prose ul { list-style:disc; padding-left:1.5rem; margin-bottom:1rem; }
+    .prose li { color:#374151; margin-bottom:.25rem; }
+    .prose blockquote { border-left:4px solid var(--primary); padding-left:1rem; font-style:italic; color:#4B5563; margin:1.5rem 0; }
+    .prose strong { color:#111827; }
+    .prose a { color:var(--primary); text-decoration:underline; }
+  </style>
 </head>
-<body>
+<body class="font-sans antialiased text-gray-800" style="background:#FFFFFF">
 
-<div class="container">
-    <h2>Mochi Cloner 🛠️</h2>
-    
-    <div class="form-group">
-        <label for="renderUrl">URL de ton serveur Render :</label>
-        <input type="text" id="renderUrl" value="https://arcane-echo-web.onrender.com">
+<!-- NAV -->
+<nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm" x-data="{open:false}">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2 min-w-0">
+        <img src="/logo.png" alt="HyperTech Niger logo" class="h-9 w-9 object-contain flex-shrink-0" loading="eager">
+        <span class="text-lg font-bold text-primary leading-tight tracking-tight truncate">HyperTech Niger</span>
+      </a>
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-6">
+                  <a href="/services.php"
+                          class="text-sm font-medium transition-colors hover:text-primary text-gray-600">
+            Services          </a>
+                  <a href="/filiales.php"
+                          class="text-sm font-medium transition-colors hover:text-primary text-gray-600">
+            Filiales          </a>
+                  <a href="/secteurs.php"
+                          class="text-sm font-medium transition-colors hover:text-primary text-gray-600">
+            Secteurs          </a>
+                  <a href="/about.php"
+                          class="text-sm font-medium transition-colors hover:text-primary text-gray-600">
+            À propos          </a>
+                  <a href="/equipe.php"
+                          class="text-sm font-medium transition-colors hover:text-primary text-gray-600">
+            Équipe          </a>
+                <a href="/contact.php" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold transition-opacity">Contact</a>
+      </div>
+      <!-- Mobile burger -->
+      <button @click="open=!open" class="md:hidden p-2 rounded text-gray-600 hover:text-primary">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          <path x-show="open"  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
+    <!-- Mobile menu -->
+    <div x-show="open" x-transition class="md:hidden pb-4 space-y-1">
+              <a href="/services.php"
+                      class="block px-3 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary">
+          Services        </a>
+              <a href="/filiales.php"
+                      class="block px-3 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary">
+          Filiales        </a>
+              <a href="/secteurs.php"
+                      class="block px-3 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary">
+          Secteurs        </a>
+              <a href="/about.php"
+                      class="block px-3 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary">
+          À propos        </a>
+              <a href="/equipe.php"
+                      class="block px-3 py-2 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary">
+          Équipe        </a>
+            <a href="/contact.php" class="block mt-2 btn-primary text-center px-3 py-2 rounded-lg text-sm font-semibold">Contact</a>
+    </div>
+  </div>
+</nav>
+<section class="relative w-full overflow-hidden" style="min-height:600px">
+  <div id="hero-swiper-1" class="swiper" style="min-height:600px">
+    <div class="swiper-wrapper">
+            <div class="swiper-slide relative flex items-center justify-center" style="min-height:600px;background-image:url(https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&amp;fit=crop&amp;w=1920&amp;q=80);background-size:cover;background-position:center">
+                <div class="absolute inset-0" style="background:rgba(0,0,0,0.45)"></div>
+                <!-- ambient blobs -->
+        <div class="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full blur-3xl" style="background:#06A4DE1a"></div>
+        <div class="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rounded-full blur-3xl" style="background:#71BC521a"></div>
 
-    <form id="cloneForm">
-        <div class="form-group">
-            <label for="apkFile">Sélectionner l'APK d'origine :</label>
-            <input type="file" id="apkFile" accept=".apk" required>
+        <div class="relative z-10 text-center text-white px-6 max-w-4xl mx-auto py-24">
+                    <span class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.24em] text-white/80 backdrop-blur-md">
+            L&#039;écosystème technologique intégré d&#039;Afrique de l&#039;Ouest          </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            HyperTech Group          </h1>
+                    <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Six filiales complémentaires couvrant l&#039;ensemble de la chaîne de valeur technologique : du matériel électronique aux solutions logicielles avancées, en passant par la fabrication numérique, la domotique, l&#039;agriculture intelligente et la géolocalisation.          </p>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <a href="/contact.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold bg-white transition-all hover:bg-white/90 hover:shadow-xl"
+               style="color:#06A4DE">
+              Parler à un expert            </a>
+                                    <a href="/filiales.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold border border-white/30 bg-white/10 text-white transition-all hover:bg-white hover:text-gray-900">
+              Découvrir les filiales            </a>
+                      </div>
         </div>
-        <div class="form-group">
-            <label for="ancienPackage">Ancien Package Name :</label>
-            <input type="text" id="ancienPackage" placeholder="ex: com.original.app" required>
-        </div>
-        <div class="form-group">
-            <label for="nouveauPackage">Nouveau Package Name :</label>
-            <input type="text" id="nouveauPackage" placeholder="Même longueur ! ex: com.original.apc" required>
-        </div>
-        <div class="form-group">
-            <label for="ancienNom">Ancien Nom de l'App :</label>
-            <input type="text" id="ancienNom" placeholder="ex: MonApplication" required>
-        </div>
-        <div class="form-group">
-            <label for="nouveauNom">Nouveau Nom :</label>
-            <input type="text" id="nouveauNom" placeholder="Même longueur ! ex: MonClonageeee" required>
-        </div>
-        <button type="submit">Lancer le clonage binaire</button>
-    </form>
+      </div>
+            <div class="swiper-slide relative flex items-center justify-center" style="min-height:600px;background-image:url(https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&amp;fit=crop&amp;w=1920&amp;q=80);background-size:cover;background-position:center">
+                <div class="absolute inset-0" style="background:rgba(0,0,0,0.42)"></div>
+                <!-- ambient blobs -->
+        <div class="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full blur-3xl" style="background:#06A4DE1a"></div>
+        <div class="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rounded-full blur-3xl" style="background:#71BC521a"></div>
 
-    <div id="status">Prêt pour le test</div>
-</div>
+        <div class="relative z-10 text-center text-white px-6 max-w-4xl mx-auto py-24">
+                    <span class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.24em] text-white/80 backdrop-blur-md">
+            De l&#039;idée à la mise en service, un interlocuteur unique          </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Une seule équipe, six expertises          </h1>
+                    <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+            HyperTech Group élimine la fragmentation des projets technologiques. Nos six entités travaillent en synergie pour livrer des solutions complètes, réduisant les délais de 60 % et les coûts de 30 à 40 %.          </p>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <a href="/contact.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold bg-white transition-all hover:bg-white/90 hover:shadow-xl"
+               style="color:#06A4DE">
+              Demander une étude            </a>
+                                    <a href="/services.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold border border-white/30 bg-white/10 text-white transition-all hover:bg-white hover:text-gray-900">
+              Voir nos services            </a>
+                      </div>
+        </div>
+      </div>
+            <div class="swiper-slide relative flex items-center justify-center" style="min-height:600px;background-image:url(https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&amp;fit=crop&amp;w=1920&amp;q=80);background-size:cover;background-position:center">
+                <div class="absolute inset-0" style="background:rgba(0,0,0,0.40)"></div>
+                <!-- ambient blobs -->
+        <div class="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full blur-3xl" style="background:#06A4DE1a"></div>
+        <div class="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rounded-full blur-3xl" style="background:#71BC521a"></div>
 
+        <div class="relative z-10 text-center text-white px-6 max-w-4xl mx-auto py-24">
+                    <span class="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.24em] text-white/80 backdrop-blur-md">
+            Technologie adaptée aux réalités sahéliennes          </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Solutions conçues pour le terrain africain          </h1>
+                    <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+            HyperFlow optimise l&#039;irrigation, HyperTrack sécurise vos flottes, DreamHouse connecte vos habitations. Des solutions opérationnelles pensées pour décideurs, agriculteurs, transporteurs et institutions au Niger et en Afrique de l&#039;Ouest.          </p>
+                    <div class="flex flex-wrap gap-3 justify-center">
+                        <a href="/secteurs.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold bg-white transition-all hover:bg-white/90 hover:shadow-xl"
+               style="color:#06A4DE">
+              Explorer nos solutions            </a>
+                                    <a href="/about.php"
+               class="inline-flex items-center rounded-full px-6 py-3 text-sm font-bold border border-white/30 bg-white/10 text-white transition-all hover:bg-white hover:text-gray-900">
+              Notre vision            </a>
+                      </div>
+        </div>
+      </div>
+          </div>
+        <button class="hero-swiper-1-prev absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-white/15 p-3 text-white shadow-lg backdrop-blur-md transition-all hover:-translate-y-1 hover:bg-white/25">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="hero-swiper-1-next absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-white/15 p-3 text-white shadow-lg backdrop-blur-md transition-all hover:-translate-y-1 hover:bg-white/25">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="hero-swiper-1-pager swiper-pagination"></div>
+      </div>
+</section>
 <script>
-    document.getElementById('cloneForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const serverUrl = document.getElementById('renderUrl').value.trim();
-        const statusDiv = document.getElementById('status');
-        
-        const fileInput = document.getElementById('apkFile');
-        const ancienPkg = document.getElementById('ancienPackage').value;
-        const nouveauPkg = document.getElementById('nouveauPackage').value;
-        const ancienNom = document.getElementById('ancienNom').value;
-        const nouveauNom = document.getElementById('nouveauNom').value;
-
-        if (ancienPkg.length !== nouveauPkg.length || ancienNom.length !== nouveauNom.length) {
-            alert("⚠️ Attention : L'ancien et le nouveau texte doivent faire EXACTEMENT la même longueur pour ce test binaire !");
-            return;
-        }
-
-        statusDiv.innerText = "Téléversement et traitement en cours sur Render...";
-        statusDiv.style.color = "#0070f3";
-
-        const formData = new FormData();
-        formData.append('apk', fileInput.files[0]);
-        formData.append('ancienPackage', ancienPkg);
-        formData.append('nouveauPackage', nouveauPkg);
-        formData.append('ancienNom', ancienNom);
-        formData.append('nouveauNom', nouveauNom);
-
-        fetch(`${serverUrl}/clone`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Erreur serveur lors du traitement.');
-            return response.blob();
-        })
-        .then(blob => {
-            statusDiv.innerText = "Succès ! Téléchargement du clone...";
-            statusDiv.style.color = "green";
-            
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "Clone_" + fileInput.files[0].name;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        })
-        .catch(error => {
-            console.error(error);
-            statusDiv.innerText = "Échec du traitement.";
-            statusDiv.style.color = "red";
-        });
-    });
+new Swiper('#hero-swiper-1',{
+  loop:true,
+  autoplay:{delay:5500,disableOnInteraction:false},
+  pagination:{el:'.hero-swiper-1-pager',clickable:true,
+    bulletClass:'inline-block h-2.5 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 cursor-pointer mx-1',
+    bulletActiveClass:'!w-8 !bg-white !shadow-lg',
+    renderBullet:function(i,c){return'<span class="'+c+'" style="width:10px"></span>';}
+  },
+  navigation:{nextEl:'.hero-swiper-1-next',prevEl:'.hero-swiper-1-prev'},
+});
 </script>
-
-</body>
-              </html>
-              
+<section class="relative isolate overflow-hidden py-16 md:py-24 bg-gray-50">
+  <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full blur-3xl" style="background:#06A4DE0f"></div>
+  <div class="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full blur-3xl" style="background:#71BC520f"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="group flex gap-4 bg-white rounded-[1.75rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_42px_rgba(15,23,42,0.11)]">
+        <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+             style="background:#06A4DE">
+          01        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">Commerce &amp; Matériel</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Boutique HyperTech Electronics avec disponibilités locales et conseil technique.</p>
+        </div>
+      </div>
+            <div class="group flex gap-4 bg-white rounded-[1.75rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_42px_rgba(15,23,42,0.11)]">
+        <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+             style="background:#06A4DE">
+          02        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">Innovation &amp; R&amp;D</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Développement IoT, web, mobile et IA sur mesure pour vos besoins.</p>
+        </div>
+      </div>
+            <div class="group flex gap-4 bg-white rounded-[1.75rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_42px_rgba(15,23,42,0.11)]">
+        <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+             style="background:#06A4DE">
+          03        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">Fabrication Numérique</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Impression 3D, laser et menuiserie pour prototypes et production.</p>
+        </div>
+      </div>
+            <div class="group flex gap-4 bg-white rounded-[1.75rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_42px_rgba(15,23,42,0.11)]">
+        <div class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+             style="background:#06A4DE">
+          04        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 mb-1">Solutions SaaS</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">HyperTrack (fleet management), HyperFlow (irrigation intelligente), DreamHouse (domotique).</p>
+        </div>
+      </div>
+          </div>
+  </div>
+</section>
+<section class="bg-gray-900 py-16 md:py-24">
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+            <span class="inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] mb-3 backdrop-blur-sm"
+            style="border-color:#06A4DE1a;background:white;color:#06A4DE">
+        Un écosystème complet au service de vos projets      </span>
+                  <h2 class="text-3xl md:text-4xl font-bold text-white">
+        Les six filiales du groupe      </h2>
+          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <a href="https://electro.hypertechniger.com" class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white/92 p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_42px_rgba(15,23,42,0.11)] block">
+              <div class="absolute inset-x-0 top-0 h-1 opacity-0 transition-opacity group-hover:opacity-100"
+             style="background:linear-gradient(to right,#06A4DE,#71BC52)"></div>
+        <div class="mb-4 w-12 h-12 rounded-2xl flex items-center justify-center ring-1"
+             style="background:#06A4DE1a;ring-color:#06A4DE1a">
+          
